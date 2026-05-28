@@ -1,0 +1,171 @@
+
+Ohtaka: ssh -i .ssh/id_rsa k017129@ohtaka.issp.u-tokyo.ac.jp
+sohib0206
+
+mic: ssh -l sohib 133.28.46.211
+sohib0206
+
+
+<MD.Fixed.Cell.Vectors
+0 0 0
+0 0 0
+0 0 0
+MD.Fixed.Cell.Vectors>
+
+<MD.Fixed.XYZ
+1  0 0 1
+2  0 0 1
+3  0 0 1
+4  0 0 1
+MD.Fixed.XYZ>
+
+
+<Definition.of.Atomic.Species
+  S     S7.0-s2p2d1f1     S_PBE19
+  Zn    Zn6.0S-s3p2d2f1     Zn_PBE19S
+  Co    Co6.0S-s3p2d2f1     Co_PBE19S
+  Al    Al7.0-s3p2d2  Al_PBE19
+  Mg    Mg9.0-s3p2d1      Mg_PBE19
+  Cr    Cr6.0-s3p2d2f1      Cr_PBE19
+Definition.of.Atomic.Species>
+
+Mg    5.0  3.0  45.0 0.0 45.0 0.0  0  on
+Al    1.5     1.5     45.0     0.0     45.0     0.0     0     on
+Co    8.0  7.0  45.0 0.0 45.0 0.0  0  on
+Cr     6.0     8.0     45.0     0.0     45.0     0.0     0     on
+
+
+#Hubbard
+scf.Hubbard.U                 Off       # On|Off, default=off
+scf.DFTU.Type                 1   # 1:Simplified(Dudarev)|2:General, default=1
+scf.Hubbard.Occupation        dual     # onsite|full|dual, default=dual
+
+<Hubbard.U.values                 #  eV
+ Zn  1s 0.0 2s 0.0 3s 0.0 1p 0.0 2p 0.0 1d 0.0 2d 0.0 1f 0.0
+ S   1s 0.0 2s 0.0 3s 0.0 1p 0.0 2p 0.0 1d 0.0 1f 0.0
+Hubbard.U.values>
+
+
+MD.Type                       RF
+MD.Opt.DIIS.History          3         # default=3
+MD.Opt.StartDIIS             5         # default=5
+MD.Opt.EveryDIIS            200        # default=200
+MD.maxIter                  800        # default=1
+MD.Opt.criterion          3.0e-4       # default=0.0003 (Hartree/Bohr)
+
+Voronoi.charge on #on|off,default = off
+
+
+
+#DOS-PDOS
+Dos.fileout                  on        # on|off, default=off
+Dos.Erange              -25.0  20.0    # default = -20 20 
+Dos.Kgrid                12 12 12      # default = Kgrid1 Kgrid2 Kgrid3
+
+
+scf.SpinPolarization          NC
+scf.SpinOrbit.Coupling	      on
+
+
+#Band-Structure
+Band.dispersion               on
+Band.Nkpath                   6
+<Band.kpath
+  20  0.000000 0.000000 0.000000   0.000000 0.500000 0.000000   G X
+  20  0.000000 0.500000 0.000000   0.500000 0.500000 0.000000   X M
+  28  0.500000 0.500000 0.000000   0.000000 0.000000 0.000000   M G
+  34  0.000000 0.000000 0.000000   0.500000 0.500000 0.500000   G R
+  28  0.500000 0.500000 0.500000   0.000000 0.500000 0.000000   R X
+  20  0.500000 0.500000 0.000000   0.500000 0.500000 0.500000   M R
+Band.kpath>
+
+#
+# Unfolding of bands
+#
+
+Unfolding.Electronic.Band      on     # on|off, default=off
+Unfolding.LowerBound        -6.0     # default=-10 eV
+Unfolding.UpperBound          6.0     # default= 10 eV
+
+Unfolding.desired_totalnkpt    30     
+Unfolding.Nkpoint               4
+
+<Unfolding.kpoint
+ G 0.000000 0.000000 0.000000
+ Y 0.000000 0.000000 0.500000
+ H 0.000000 0.333176 0.666851
+ G 0.000000 0.000000 0.000000
+Unfolding.kpoint>
+
+<Unfolding.ReferenceVectors
+ 40.000000000000000   0.000000000000000   0.000000000000000 
+  0.000000000000000   2.470300000000000   0.000000000000000 
+  0.000000000000000   1.237103800000000   2.138328900000000 
+Unfolding.ReferenceVectors>
+
+<Unfolding.Map
+  1 1
+  2 2
+  3 1
+  4 2
+Unfolding.Map>
+
+
+
+#Charge-Doping
+scf.system.charge     1.0     # default=0.0
+
+
+
+scf.Hubbard.U                 on       # On|Off, default=off
+scf.DFTU.Type                 1   # 1:Simplified(Dudarev)|2:General, default=1
+scf.Hubbard.Occupation        dual     # onsite|full|dual, default=dual
+
+
+<Hubbard.U.values                 #  eV
+ Zn  1s 0.0 2s 0.0 3s 0.0 1p 0.0 2p 0.0 1d 0.0 2d 0.0 1f 0.0
+ S   1s 0.0 2s 0.0 1p 0.0 2p 0.0 1d 0.0 1f 0.0
+ Cr  1s 0.0 2s 0.0 3s 0.0 1p 0.0 2p 0.0 1d 4.4 2d 0.0 1f 0.0
+Hubbard.U.values>
+
+#Molecular Dynamics
+
+MD.Type                    NVT_NH      # Nomd|Constant_Energy_MD|Opt
+                                       # Constraint_Opt|DIIS2|Constraint_DIIS2
+MD.maxIter                  700        # default=1
+MD.TimeStep                0.2         # default=0.5 (fs)
+MD.Opt.criterion          1.0e-11      # default=1.0e-4 (Hartree/bohr)
+MD.Opt.DIIS_Mixing          0.1        # default=0.5
+<MD.TempControl
+  4 
+    1   1000.0
+  100   1000.0
+  400    700.0
+  700    600.0
+MD.TempControl>
+NH.Mass.HeatBath             30
+-------------------------------------------------------------------------------
+
+MD.Type                    NVT_VS      # Nomd|Constant_Energy_MD|Opt
+                                       # Constraint_Opt|DIIS2|Constraint_DIIS2
+MD.maxIter                  700        # default=1
+MD.TimeStep                0.2         # default=0.5 (fs)
+MD.Opt.criterion          1.0e-11      # default=1.0e-4 (Hartree/bohr)
+MD.Opt.DIIS_Mixing          0.1        # default=0.5
+<MD.TempControl
+  3 
+  100   2  1000.0  0.0  
+  400  10   700.0  0.4
+  700  40   500.0  0.7
+MD.TempControl>
+
+
+./DosMain grbn.Dos.val grbn.Dos.vec << IN
+1
+1
+IN
+
+srun /home/k0171/k017129/openmx3.9/source/openmx grbn.dat -nt 4
+srun /home/k0171/k017129/openmx3.9/source/gcube2oned grbn.vhart.cube 1 > gr-vhart.txt
+srun /home/k0171/k017129/openmx3.9/source/gcube2oned grbn.tden.cube 1 > gr-tden.txt
+
