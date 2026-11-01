@@ -1,0 +1,93 @@
+#!/bin/bash
+
+############################################
+# Ambil folder numerik dan urutkan
+############################################
+folders=$(ls -d [0-9]* 2>/dev/null | sort -n)
+
+############################################
+# ----------- Vhart ------------------------
+############################################
+
+tmpdir=$(mktemp -d)
+
+i=0
+for folder in $folders
+do
+    file="$folder/gr-vhart-f.txt"
+    tmpfile="$tmpdir/col_$i.txt"
+
+    if [ -f "$file" ]; then
+        awk 'NF>=3 {print $3}' "$file" > "$tmpfile"
+    else
+        touch "$tmpfile"
+    fi
+
+    ((i++))
+done
+
+# Gabungkan (transpose)
+paste $(ls $tmpdir/col_*.txt | sort -V) > combine-vhart.txt
+
+rm -r "$tmpdir"
+
+echo "combine-vhart.txt selesai dibuat"
+
+############################################
+# ----------- TDEN -------------------------
+############################################
+
+tmpdir=$(mktemp -d)
+
+i=0
+for folder in $folders
+do
+    file="$folder/gr-tden-f.txt"
+    tmpfile="$tmpdir/col_$i.txt"
+
+    if [ -f "$file" ]; then
+        awk 'NF>=3 {print $3}' "$file" > "$tmpfile"
+    else
+        touch "$tmpfile"
+    fi
+
+    ((i++))
+done
+
+paste $(ls $tmpdir/col_*.txt | sort -V) > combine-tden.txt
+
+rm -r "$tmpdir"
+
+echo "combine-tden.txt selesai dibuat"
+
+############################################
+# ----------- MC (gabung *C.txt) ----------
+############################################
+
+output="all-C.txt"
+> "$output"
+
+for file in $(ls *C.txt 2>/dev/null | sort)
+do
+    echo "=== $file ===" >> "$output"
+    cat "$file" >> "$output"
+    echo -e "\n" >> "$output"
+done
+
+echo "✅ Berhasil menggabungkan file *C.txt ke $output"
+
+############################################
+# ----------- MC-BN (gabung *BN.txt) ------
+############################################
+
+output="all-BN.txt"
+> "$output"
+
+for file in $(ls *BN.txt 2>/dev/null | sort)
+do
+    echo "=== $file ===" >> "$output"
+    cat "$file" >> "$output"
+    echo -e "\n" >> "$output"
+done
+
+echo "✅ Berhasil menggabungkan file *BN.txt ke $output"

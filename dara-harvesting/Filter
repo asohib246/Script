@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# Loop untuk gr-vhart.txt
+for i in {0..48}
+do
+    input="./$i/gr-vhart.txt"
+    output="./$i/gr-vhart-f.txt"
+
+    if [ ! -f "$input" ]; then
+        echo "File tidak ditemukan: $input"
+        continue
+    fi
+
+    awk '
+    NF==3 {
+        key = $2 " " $3
+        if (!(key in seen)) {
+            seen[key]=1
+            print
+        }
+    }
+    ' "$input" > "$output"
+
+    echo "Selesai memproses folder $i, hasil disimpan di $output"
+done
+
+
+# Loop untuk gr-tden.txt
+for i in {0..49}
+do
+    input="./$i/gr-tden.txt"
+    output="./$i/gr-tden-f.txt"
+
+    if [ ! -f "$input" ]; then
+        echo "File tidak ditemukan: $input"
+        continue
+    fi
+
+    awk '
+    NF==3 {
+        key = $2 " " $3
+        if (!(key in seen)) {
+            seen[key]=1
+            print
+        }
+    }
+    ' "$input" > "$output"
+
+    echo "Selesai memproses folder $i, hasil disimpan di $output"
+done

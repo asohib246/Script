@@ -1,0 +1,42 @@
+#!/bin/bash
+
+keyword="Up       Down      Sum      Diff        theta      phi"
+
+# Ambil folder angka dan sort numerik
+folders=$(ls -d [0-9]* 2>/dev/null | sort -n)
+
+# Kosongkan file output
+> combine-1C.txt
+> combine-2C.txt
+> combine-3C.txt
+> combine-4C.txt
+
+for folder in $folders
+do
+    file="$folder/grbn.out"
+
+    if [ ! -f "$file" ]; then
+        continue
+    fi
+
+    # Cari nomor baris keyword
+    line_num=$(grep -n "$keyword" "$file" | head -n 1 | cut -d: -f1)
+
+    if [ -z "$line_num" ]; then
+        continue
+    fi
+
+    # Ambil baris sesuai offset
+    line1=$(sed -n "$((line_num+1))p" "$file")
+    line2=$(sed -n "$((line_num+2))p" "$file")
+    line3=$(sed -n "$((line_num+9))p" "$file")
+    line4=$(sed -n "$((line_num+10))p" "$file")
+
+    # Simpan ke file
+    [ -n "$line1" ] && echo -e "$folder\t$line1" >> combine-1C.txt
+    [ -n "$line2" ] && echo -e "$folder\t$line2" >> combine-2C.txt
+    [ -n "$line3" ] && echo -e "$folder\t$line3" >> combine-3C.txt
+    [ -n "$line4" ] && echo -e "$folder\t$line4" >> combine-4C.txt
+
+    echo "Processed folder $folder"
+done
