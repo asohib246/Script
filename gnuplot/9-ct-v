@@ -1,0 +1,52 @@
+set term pngcairo size 1200,1200 enhanced font 'Arial,28'
+
+set lmargin 14
+set rmargin 4
+set bmargin 6
+set tmargin 3
+
+set output "C_T-vs-V.PNG"
+
+# Bingkai hitam
+set border lt 1 lw 5 lc rgb 'black'
+
+# Legend di kanan atas
+set key title "d = 14.22 Å" font ",40"
+set key top left
+set key samplen 0.6
+set key font "Arial,35"
+#set key spacing 1.2
+#set key textcolor rgb "black"
+
+set zeroaxis
+
+# Ticks
+set ytics 0.4 out nomirror
+set mytics 1
+set format y "%.1f"
+
+set xtics 0.5 out nomirror
+set mxtics 1
+
+unset y2tics
+unset my2tics
+
+set ytics font "Arial,50"
+set xtics font "Arial,50"
+
+set ylabel "{Capacitance ({/Symbol m}F/cm^2)" font ("Arial,55") offset -3,0
+set xlabel "V (volt)" font ("Arial,55")  offset 0,-1
+
+set yrange [0:1.6]
+set xrange [-1.0:1.0]
+
+set xzeroaxis lt 0 lw 1.5 lc rgb 'black'
+
+plot \
+	"ct.txt" using 2:4 with linespoints lw 3.0 lc rgb "orange" \
+    		pt 6 ps 0.8 title "C_{total}", \
+	"ct.txt" using 2:5 with lines lw 3.0 dt 3 lc rgb "orange" title "C_{geo}", \
+
+
+
+unset output

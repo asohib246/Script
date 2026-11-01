@@ -1,0 +1,54 @@
+set term pngcairo size 1200,1200 enhanced font 'Arial,28'
+
+set lmargin 14
+set rmargin 4
+set bmargin 6
+set tmargin 3
+
+set output "rho-pos.PNG"
+
+# Bingkai hitam
+set border lt 1 lw 5 lc rgb 'black'
+
+# Legend di kanan atas
+set key bottom left
+set key samplen 0.6
+set key font "Arial,35"
+#set key spacing 1.2
+#set key textcolor rgb "black"
+
+set zeroaxis
+
+# Ticks
+set ytics 0.1 out nomirror
+set mytics 1
+set format y "%.1f"
+
+set xtics 10 out nomirror
+set mxtics 1
+
+unset y2tics
+unset my2tics
+
+set ytics font "Arial,50"
+set xtics font "Arial,50"
+
+set ylabel "{/Symbol D}{/Symbol r} (10^{-3} e/Å)" font ("Arial,55") offset -3,0
+set xlabel "x (Å)" font ("Arial,55")  offset 0,-1
+
+set yrange [-0.2:0.2]
+set xrange [0:40]
+
+set xzeroaxis lt 0 lw 1.5 lc rgb 'black'
+
+plot \
+    "rho.txt" using 1:8 with lines lw 3.0 lc rgb "#B7C5E4" title "0.0005e", \
+    ""       using 1:9 with lines lw 3.0 lc rgb "#93A2C4" title "0.0010e", \
+    ""       using 1:10 with lines lw 3.0 lc rgb "#6E7EA3" title "0.0015e", \
+    ""       using 1:11 with lines lw 3.0 lc rgb "#495A82" title "0.0020e", \
+    ""       using 1:12 with lines lw 3.0 lc rgb "#253661" title "0.0025e", \
+    "line.txt" using 1:2 with lines lw 3.0 lc rgb "#E0E0E0" dt 2 title "", \
+    "line.txt" using 3:4 with lines lw 3.0 lc rgb "#E0E0E0" dt 2 title ""
+
+
+unset output
